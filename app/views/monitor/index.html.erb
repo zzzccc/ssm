@@ -1,0 +1,55 @@
+<h1>Listing vmstats</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mem active</th>
+      <th>Net in</th>
+      <th>Net out</th>
+      <th>Time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vmstats.each do |vmstat| %>
+      <tr>
+        <td><%= vmstat.mem_active %></td>
+        <td><%= vmstat.net_in %></td>
+        <td><%= vmstat.net_out %></td>
+        <td><%= vmstat.time %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Mem active</th>
+      <th>Net in</th>
+      <th>Net out</th>
+      <th>Time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @https.each do |http| %>
+      <tr>
+        <td><%= http.server %></td>
+        <td><%= http.code %></td>
+        <td><%= http.remote %></td>
+        <td><%= http.agent %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

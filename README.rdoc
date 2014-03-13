@@ -1,5 +1,67 @@
 == README
 
+SSM(Simple Server Monitoring)
+
+collect system info(cpu usage, network usage etc..) and http 2XX,5XX log through fluentd
+draw graph using d3, cubism js
+
+tested in ubuntu
+In Windows , gem install may be fail or not. I'm not sure. 
+
+requirement
+
+* ruby (may be above 2.0)
+* nginx or apache
+* mongodb
+* fluentd
+
+
+installation
+
+1. clone this app
+2. cd ssm 
+3. bundle install
+4. gem install fluentd --no-ri --no-rdoc
+5. gem install fluent-plugin-mongo --no-ri --no-rdoc
+6. gem install vmstat --no-ri --no-rdoc 
+7. add plugin to fluentd
+- in my fluentd plugin dir is
+cd ~/.rbenv/versions/2.1.0/lib/ruby/gems/2.1.0/gems/fluentd-0.10.44/lib/fluent/plugin
+ln -s ~/ssm/in_vmstat.rb ./in_vmstat.rb
+
+8. edit ssm/fluentd.conf following lines to your env
+  path /usr/local/etc/nginx/logs/ssm.log
+  pos_file /Users/wongyeongyun/tmp/httpd-access.log.pos
+
+9. edit ssm/config/mongoid.yml to your mongodb env.
+10. add or change nginx log format(apache log is not tested)
+- in your nginx.conf
+--------------
+log_format ssm '$server_name $server_port $remote_addr - $remote_user [$time_local] '
+                    '"$request" $status $body_bytes_sent '
+                    '"$http_referer" "$http_user_agent"';
+
+access_log /usr/local/etc/nginx/logs/ssm.log ssm;
+-----------------
+
+and ssm.log will be like follow:
+
+localhost 80 127.0.0.1 - - [13/Mar/2014:18:57:47 +0900] "GET / HTTP/1.1" 200 393 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.73.11 (KHTML, like Gecko) Version/7.0.1 Safari/537.73.11"
+
+11. fluentd -c ssm/fluentd.conf ( run fluentd )
+
+12. your mongo console add following indexes ( or ssm will be slow)
+> db.https.ensureIndex({time:-1})
+> db.https.ensureIndex({code:1})
+> db.vmstats.ensureIndex({time:-1})
+
+13. end.
+
+
+
+
+
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

@@ -1,0 +1,40 @@
+%h1 TEST
+
+%div
+  
+  %h4 heartbeat
+  %select
+    %option 1sec
+    %option 5secs
+    %option 10secs
+    %option 30secs
+    %option 60secs
+
+  %h4 host
+  %select
+    %option ALL
+    %option HOST1
+    %option HOST2
+
+  %h4 type
+  %select
+    %option ALL
+    %option HTTP
+    %option SYS
+
+  %h4 select
+  %select
+    %option ALL
+    %option CPU
+    %option MEMORY
+    %option NETWORK
+
+%hr
+
+%div#chart
+  chart area
+
+:javascript
+  $(window).load(function(){
+    chart();
+  });

@@ -7,6 +7,8 @@ gem 'mongoid',  github: 'mongoid/mongoid'
 gem 'bson_ext'
 gem 'haml-rails'
 
+gem 'rb-readline'
+
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'

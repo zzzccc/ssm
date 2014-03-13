@@ -12,3 +12,40 @@
  *= require bootstrap.min
  *= require_tree .
  */
+
+
+svg {
+  font: 10px sans-serif;
+}
+ 
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.line-cs {
+  fill: none;
+  stroke: red;
+  stroke-width: 1.5px;
+}
+
+.line-cu {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.rect {
+  fill: steelblue;
+  stroke: white;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#example1 { min-height: 155px; }

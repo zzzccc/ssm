@@ -18,7 +18,7 @@ class VmstatInput < Fluent::Input
   def start
     super
     server_name   = Socket.gethostname
-    frequency     = 5 # every 5 secs.
+    frequency     = 1 # every 1 secs.
     cpu_idle_b    = 0
     cpu_user_b    = 0
     cpu_system_b  = 0

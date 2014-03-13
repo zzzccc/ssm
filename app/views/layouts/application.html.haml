@@ -3,12 +3,11 @@
   %head
     %meta{:charset => "utf-8"}
     %meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}
-    %title= content_for?(:title) ? yield(:title) : "RCMS"
+    %title= content_for?(:title) ? yield(:title) : "SSM"
     %meta{:content => "", :name => "description"}
     %meta{:content => "", :name => "author"}
     = stylesheet_link_tag "application" , :media => "all"
     
-    = javascript_include_tag "application", "data-turbolinks-track" => false
     = javascript_include_tag "application", "data-turbolinks-track" => false
 
     = csrf_meta_tags
@@ -19,10 +18,7 @@
       .navbar-inner
         .container
           = link_to "Simple Sys Monitor", monitor_index_path , class:"brand"
-          %span
-            = image_tag('loading-thumb.gif' , id:"icon-loading" , size:"25x25" , style:"margin-top: 10px;display:none;")
 
     .container
-      .row
-        #rcms-main.span9
-          = yield
+      #rcms-main.span9
+        = yield

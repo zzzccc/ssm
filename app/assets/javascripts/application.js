@@ -14,4 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap.min
+//= require d3.min
+//= require cubism.v1
+//= require chart
 //= require_tree .

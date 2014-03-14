@@ -57,6 +57,7 @@ function chart(){
 
   d3.select("#chart").call(function(div) {
 
+
     div.append("div")
         .attr("class", "axis")
         .call(context.axis().orient("top"));

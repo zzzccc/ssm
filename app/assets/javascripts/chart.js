@@ -1,4 +1,4 @@
-function get_info(name , url_type ) {
+function get_info(name , url_type ,context) {
 
   var value = 0;
   var values = [];
@@ -25,8 +25,8 @@ function get_info(name , url_type ) {
           last += step;
 
           if (url_type=="sys"){
-            if(name=="user") values.push(result[result.length-1].cpu_user);
-            if(name=="sys") values.push(result[result.length-1].cpu_system);
+              if(name=="user") values.push(result[result.length-1].cpu_user);
+              if(name=="sys") values.push(result[result.length-1].cpu_system);
           }
 
           if(url_type=="http"){
@@ -40,19 +40,20 @@ function get_info(name , url_type ) {
   }, name);
 }
 
-var context = cubism.context()
-    .serverDelay(0)
-    .clientDelay(0)
-    .step(1e3)
-    .size(900);
-
 
 function chart(){
 
-  var user      = get_info("user","sys");
-  var sys       = get_info("sys", "sys");
-  var http_23x   = get_info("23x","http");
-  var http_5xx   = get_info("5xx","http");
+  var width = $("#chart").width();
+  var context = cubism.context()
+    .serverDelay(0)
+    .clientDelay(0)
+    .step(1e3)
+    .size(width);
+
+  var user      = get_info("user","sys",context);
+  var sys       = get_info("sys", "sys",context);
+  var http_23x   = get_info("23x","http",context);
+  var http_5xx   = get_info("5xx","http",context);
 
   d3.select("#chart").call(function(div) {
 
@@ -60,13 +61,13 @@ function chart(){
         .attr("class", "axis")
         .call(context.axis().orient("top"));
 
-    div.selectAll(".horizon1")
+    div.selectAll(".horizon")
         .data([user.add(sys), user,sys])// add,subtract,multuiply,divide
       .enter().append("div")
         .attr("class", "horizon")
         .call(context.horizon().extent([0, 100]));
 
-    div.selectAll(".horizon2")
+    div.selectAll(".horizon1")
         .data([http_23x, http_5xx])
       .enter().append("div")
         .attr("class", "horizon")
@@ -75,7 +76,6 @@ function chart(){
     div.append("div")
         .attr("class", "rule")
         .call(context.rule());
-
   });
 
   // On mousemove, reposition the chart values to match the rule.

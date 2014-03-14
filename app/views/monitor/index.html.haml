@@ -1,5 +1,11 @@
 %h1 TEST
-%h1 SIMPLE SYS MONITOR
+%h3 SIMPLE SYS MONITOR
+
+%div
+  %span ADD HOSTNAME
+  = form_for Srvinfo.new , remote:true do |f|
+    %input{type:"text",class:"input-large",name:"document[title]",id:"document_title",value:""}
+
 
 %div
   
@@ -32,7 +38,7 @@
 
 %hr
 
-%div#chart
+%div.span9#chart
   chart area
 
 :javascript

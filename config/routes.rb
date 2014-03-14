@@ -1,5 +1,7 @@
 Ssm::Application.routes.draw do
   
+  resources :srvinfos
+
   resources :monitor
 
   get 'sys' => 'monitor#sys', as: :monitor_sys

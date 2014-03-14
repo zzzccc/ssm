@@ -1,8 +1,7 @@
 class MonitorController < ApplicationController
 
   def index
-    @vmstats=Vmstat.all
-    @https=Http.all
+    @srvinfos=Srvinfo.order("host asc")
   end
 
   def sys
@@ -11,11 +10,15 @@ class MonitorController < ApplicationController
   end
 
   def http
-    sec_5_ago=10.seconds.ago.iso8601
+    secs=5
+    sec_ago=secs.seconds.ago.iso8601
     now=Time.now.iso8601
-    @count_4XX = Http.where( :code => /^4/, :time => { :$gte => sec_5_ago , :$lte => now } ).count
-    @count_23X = Http.where( :code => /^2|^3/, :time => { :$gte => sec_5_ago , :$lte => now } ).count
-    @count_5XX = Http.where( :code => /^5/, :time => { :$gte => sec_5_ago , :$lte => now } ).count
+    @count_4XX = Http.where( :code => /^4/, :time => { :$gte => sec_ago , :$lte => now } ).count
+    @count_23X = Http.where( :code => /^2|^3/, :time => { :$gte => sec_ago , :$lte => now } ).count
+    @count_5XX = Http.where( :code => /^5/, :time => { :$gte => sec_ago , :$lte => now } ).count
+  end
+
+  def edit
   end
 
 end

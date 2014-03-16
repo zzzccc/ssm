@@ -3,8 +3,10 @@
 %hr
 
 %div.span9#chart{style:"position:relative"}
+%div.span9#chart1{style:"position:relative"}
 
 :javascript
   $(window).load(function(){
-    chart();
+    chart("localhost","#chart");
+    chart("localhost","#chart1");
   });

@@ -1,12 +1,12 @@
-function get_info(name , url_type ,context) {
+function get_info(hostname, name , url_type ,context) {
 
   var value = 0;
   var values = [];
   var i = 0;
   var last;
 
-  var sys_url="http://localhost:3000/sys.json";
-  var http_url="http://localhost:3000/http.json";
+  var sys_url="http://localhost:3000/sys/"+encodeURIComponent(hostname);
+  var http_url="http://localhost:3000/http/"+encodeURIComponent(hostname);
   var url="";
 
   if(url_type=="sys") url = sys_url;
@@ -41,22 +41,21 @@ function get_info(name , url_type ,context) {
 }
 
 
-function chart(){
+function chart(hostname, chart_div){
 
-  var width = $("#chart").width();
+  var width = $(chart_div).width();
   var context = cubism.context()
     .serverDelay(0)
     .clientDelay(0)
     .step(1e3)
     .size(width);
 
-  var user      = get_info("user","sys",context);
-  var sys       = get_info("sys", "sys",context);
-  var http_23x   = get_info("23x","http",context);
-  var http_5xx   = get_info("5xx","http",context);
+  var user      = get_info(hostname,"user","sys",context);
+  var sys       = get_info(hostname,"sys", "sys",context);
+  var http_23x   = get_info(hostname,"23x","http",context);
+  var http_5xx   = get_info(hostname,"5xx","http",context);
 
-  d3.select("#chart").call(function(div) {
-
+  d3.select(chart_div).call(function(div) {
 
     div.append("div")
         .attr("class", "axis")

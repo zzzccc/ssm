@@ -17,7 +17,7 @@ class VmstatInput < Fluent::Input
   # Open sockets or files and create a thread here.
   def start
     super
-    server_name   = Socket.gethostname
+    server_name   = Socket.gethostname.downcase
     frequency     = 1 # every 1 secs.
     cpu_idle_b    = 0
     cpu_user_b    = 0

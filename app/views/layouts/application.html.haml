@@ -14,11 +14,48 @@
     = yield(:head)
 
   %body
-    .navbar.navbar-inverse.navbar-fixed-top
-      .navbar-inner
-        .container
-          = link_to "Simple Sys Monitor", monitor_index_path , class:"brand"
+    %nav.navbar.navbar-default{role: "navigation"}
+      / Brand and toggle get grouped for better mobile display
+      .navbar-header
+        %button.navbar-toggle{"data-target" => ".navbar-ex1-collapse", "data-toggle" => "collapse", type: "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        %a.navbar-brand{href: "#{monitor_index_url}"} SSM
+      / Collect the nav links, forms, and other content for toggling
+      .collapse.navbar-collapse.navbar-ex1-collapse
+        %ul.nav.navbar-nav
+          %li.active
+            %a{href: "#"} Link
+          %li
+            %a{href: "#"} Link
+          %li.dropdown
+            %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+              Dropdown
+              %b.caret
+            %ul.dropdown-menu
+              %li
+                %a{href: "#"} Action
+
+        %form.navbar-form.navbar-left{role: "search"}
+          .form-group
+            %input.form-control{placeholder: "Search", type: "text"}/
+          %button.btn.btn-default{type: "submit"} SEARCH
+        %ul.nav.navbar-nav.navbar-right
+          %li
+            %a{href: "#"} Link
+          %li.dropdown
+            %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+              Dropdown
+              %b.caret
+            %ul.dropdown-menu
+              %li
+                %a{href: "#"} Action
+              %li
+                %a{href: "#"} Another action
+      / /.navbar-collapse
 
     .container-fluid
-      #rcms-main.span9
+      #ssm-main.span9
         = yield

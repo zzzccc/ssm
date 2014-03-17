@@ -12,8 +12,6 @@ function get_info(hostname, name , url_type,context) {
   if(url_type=="sys") url = sys_url;
   if(url_type=="http") url = http_url;
 
-  var deleim_token=hostname+name;
-
   return context.metric(function(start, stop, step, callback) {
     
     $.getJSON(url , 
@@ -53,9 +51,11 @@ function chart(hostname, chart_div,context){
 
   d3.select(chart_div[0]).call(function(div) {
 
+    if(chart_div[0]=="#chart1"){
     div.append("div")
         .attr("class", "axis")
         .call(context.axis().orient("top"));
+      }
 
     div.selectAll(".horizon")
         .data([user.add(sys), user, sys])// add,subtract,multuiply,divide
@@ -63,15 +63,7 @@ function chart(hostname, chart_div,context){
         .attr("class", "horizon")
         .call(context.horizon().extent([0, 100]));
 
-    div.append("div")
-        .attr("class", "rule")
-        .call(context.rule());
-  });
-
-
-  d3.select(chart_div[1]).call(function(div) {
-
-    div.selectAll(".horizon")
+    div.selectAll(".horizon1")
         .data([http_23x , http_5xx])// add,subtract,multuiply,divide
       .enter().append("div")
         .attr("class", "horizon")
@@ -80,10 +72,7 @@ function chart(hostname, chart_div,context){
     div.append("div")
         .attr("class", "rule")
         .call(context.rule());
-
   });
-
-  
 
 }
 

@@ -24,12 +24,13 @@ class Vmstat
       result.server_name = vmstat.server_name
       result.time        = vmstat.time
     end
-    result.mem_active  = (result.mem_active/vmstats.length).to_i
-    result.cpu_idle    = (result.cpu_idle/vmstats.length).to_i
-    result.cpu_user    = (result.cpu_user/vmstats.length).to_i
-    result.cpu_system  = (result.cpu_system/vmstats.length).to_i
-    result.net_in      = (result.net_in/vmstats.length).to_i
-    result.net_out     = (result.net_out/vmstats.length).to_i
+    length = (vmstats.length==0 ? 1: vmstats.length)
+    result.mem_active  = (result.mem_active/length).to_i
+    result.cpu_idle    = (result.cpu_idle/length).to_i
+    result.cpu_user    = (result.cpu_user/length).to_i
+    result.cpu_system  = (result.cpu_system/length).to_i
+    result.net_in      = (result.net_in/length).to_i
+    result.net_out     = (result.net_out/length).to_i
     #puts ">>>>>>>>>#{result.cpu_system}"
     [result]
   end

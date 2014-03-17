@@ -2,11 +2,29 @@
 
 %hr
 
-%div.span9#chart{style:"position:relative"}
 %div.span9#chart1{style:"position:relative"}
+%div.span9#chart2{style:"position:relative"}
+%div.span9#chart3{style:"position:relative"}
+%div.span9#chart4{style:"position:relative"}
 
 :javascript
+  var width = $("#chart1").width();
+    
+  var context1 = cubism.context()
+    .serverDelay(0)
+    .clientDelay(0)
+    .step(1e3)
+    .size(width);
+
+  // On mousemove, reposition the chart values to match the rule.
+  context1.on("focus", function(i) {
+    d3.selectAll(".value").style("right", i == null ? null : context1.size() - i + "px");
+  });    
+
+
   $(window).load(function(){
-    chart("localhost","#chart");
-    chart("localhost","#chart1");
+
+    
+    chart("xubuntu",["#chart1","#chart2"],context1);
+    chart("xubuntu",["#chart3","#chart4"],context1);
   });

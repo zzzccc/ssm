@@ -1,6 +1,6 @@
-function get_info(hostname, name , url_type ,context) {
 
-  var value = 0;
+function get_info(hostname, name , url_type,context) {
+
   var values = [];
   var i = 0;
   var last;
@@ -12,7 +12,7 @@ function get_info(hostname, name , url_type ,context) {
   if(url_type=="sys") url = sys_url;
   if(url_type=="http") url = http_url;
 
-  console.log("url="+url);
+  var deleim_token=hostname+name;
 
   return context.metric(function(start, stop, step, callback) {
     
@@ -25,13 +25,13 @@ function get_info(hostname, name , url_type ,context) {
           last += step;
 
           if (url_type=="sys"){
-              if(name=="user") values.push(result[result.length-1].cpu_user);
-              if(name=="sys") values.push(result[result.length-1].cpu_system);
+              if(name.match(/.*user$/)) values.push(result[result.length-1].cpu_user);
+              if(name.match(/.*sys$/)) values.push(result[result.length-1].cpu_system);
           }
 
           if(url_type=="http"){
-            if(name=="23x") values.push(result.count_23x);
-            if(name=="5xx") values.push(result.count_5xx);
+            if(name.match(/.*23x$/)) values.push(result.count_23x);
+            if(name.match(/.*5xx$/)) values.push(result.count_5xx);
           }
         }
         callback(null, values = values.slice((start - stop) / step));
@@ -41,34 +41,38 @@ function get_info(hostname, name , url_type ,context) {
 }
 
 
-function chart(hostname, chart_div){
 
-  var width = $(chart_div).width();
-  var context = cubism.context()
-    .serverDelay(0)
-    .clientDelay(0)
-    .step(1e3)
-    .size(width);
+function chart(hostname, chart_div,context){
 
-  var user      = get_info(hostname,"user","sys",context);
-  var sys       = get_info(hostname,"sys", "sys",context);
-  var http_23x   = get_info(hostname,"23x","http",context);
-  var http_5xx   = get_info(hostname,"5xx","http",context);
+  
 
-  d3.select(chart_div).call(function(div) {
+  var user      = get_info(hostname,hostname+" user","sys",context);
+  var sys       = get_info(hostname,hostname+" sys", "sys",context);
+  var http_23x   = get_info(hostname,hostname+" 23x","http",context);
+  var http_5xx   = get_info(hostname,hostname+"5xx","http",context);
+
+  d3.select(chart_div[0]).call(function(div) {
 
     div.append("div")
         .attr("class", "axis")
         .call(context.axis().orient("top"));
 
     div.selectAll(".horizon")
-        .data([user.add(sys), user,sys])// add,subtract,multuiply,divide
+        .data([user.add(sys), user, sys])// add,subtract,multuiply,divide
       .enter().append("div")
         .attr("class", "horizon")
         .call(context.horizon().extent([0, 100]));
 
-    div.selectAll(".horizon1")
-        .data([http_23x, http_5xx])
+    div.append("div")
+        .attr("class", "rule")
+        .call(context.rule());
+  });
+
+
+  d3.select(chart_div[1]).call(function(div) {
+
+    div.selectAll(".horizon")
+        .data([http_23x , http_5xx])// add,subtract,multuiply,divide
       .enter().append("div")
         .attr("class", "horizon")
         .call(context.horizon().extent([0, 500]));
@@ -76,12 +80,10 @@ function chart(hostname, chart_div){
     div.append("div")
         .attr("class", "rule")
         .call(context.rule());
+
   });
 
-  // On mousemove, reposition the chart values to match the rule.
-  context.on("focus", function(i) {
-    d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-  });
+  
 
 }
 

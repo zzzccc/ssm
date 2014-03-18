@@ -24,17 +24,27 @@ class SrvinfosController < ApplicationController
   # POST /srvinfos
   # POST /srvinfos.json
   def create
-    @srvinfo = Srvinfo.new(srvinfo_params)
+
+    begin
+      error = false
+      hostandport=params[:srvinfo][:hostandport].split(":")
+      host,port=hostandport[0].strip, hostandport[1].strip
+      @srvinfo = Srvinfo.new({host: host , port: port})
+
+      error = true unless port =~/\d+/
+    rescue Exception => e
+      error = true
+    end  
 
     respond_to do |format|
-      if @srvinfo.save
-        format.html { redirect_to @srvinfo, notice: 'Srvinfo was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @srvinfo }
+      if !error and @srvinfo.save
+        message="SUCCESS !!"
       else
-        format.html { render action: 'new' }
-        format.json { render json: @srvinfo.errors, status: :unprocessable_entity }
+        message="ERROR !!"
       end
+      format.js{ render "ajax.js"  , locals:{ msg: message } } 
     end
+
   end
 
   # PATCH/PUT /srvinfos/1
@@ -69,6 +79,6 @@ class SrvinfosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def srvinfo_params
-      params.require(:srvinfo).permit(:host, :post)
+      params.require(:srvinfo).permit(:hostandport)
     end
 end

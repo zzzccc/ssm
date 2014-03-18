@@ -1,7 +1,7 @@
 class MonitorController < ApplicationController
 
   def index
-    @srvinfos=Srvinfo.order("host asc")
+    @srvinfos=Srvinfo.srvinfo_list
   end
 
   def sys
@@ -13,6 +13,8 @@ class MonitorController < ApplicationController
 
   def http
     hostname=params[:hostname].to_s
+    port=params[:port].to_s
+
     secs=5
     sec_ago=secs.seconds.ago.iso8601
     now=Time.now.iso8601

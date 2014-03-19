@@ -1,6 +1,5 @@
 - @srvinfos.each_with_index do |srvinfo, index|
-  %div.span9{id: "chart#{index*2}" , style:"position:relative"}
-  %div.span9{id: "chart#{index*2+1}" , style:"position:relative"}
+  %div.span9{id: "chart#{index}" , style:"position:relative"}
 
 :javascript
   var width = $("#chart1").width();

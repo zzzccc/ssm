@@ -18,9 +18,9 @@ class MonitorController < ApplicationController
     secs=5
     sec_ago=secs.seconds.ago.iso8601
     now=Time.now.iso8601
-    @count_4XX = Http.where( :code => /^4/, :time => { :$gte => sec_ago , :$lte => now } ).in( server: ["#{hostname}"] ).count
-    @count_23X = Http.where( :code => /^2|^3/, :time => { :$gte => sec_ago , :$lte => now } ).in( server: ["#{hostname}"] ).count
-    @count_5XX = Http.where( :code => /^5/, :time => { :$gte => sec_ago , :$lte => now } ).in( server: ["#{hostname}"] ).count
+    @count_4XX = Http.where( :code => /^4/, :time => { :$gte => sec_ago , :$lte => now } ).in( port: "#{port}", server: ["#{hostname}"] ).count
+    @count_23X = Http.where( :code => /^2|^3/, :time => { :$gte => sec_ago , :$lte => now } ).in( port: "#{port}", server: ["#{hostname}"] ).count
+    @count_5XX = Http.where( :code => /^5/, :time => { :$gte => sec_ago , :$lte => now } ).in( port: "#{port}", server: ["#{hostname}"] ).count
   end
 
   def edit

@@ -19,19 +19,16 @@ function get_info(hostname, name, url_type, context, port) {
 
         start = +start, stop = +stop;
         if (isNaN(last)) last = start;
+        
         while (last < stop) {
           last += step;
 
-          if (url_type=="sys"){
-              if(name.match(/.*user$/)) values.push(result[result.length-1].cpu_user);
-              if(name.match(/.*sys$/)) values.push(result[result.length-1].cpu_system);
-          }
-
-          if(url_type=="http"){
-            if(name.match(/.*23x$/)) values.push(result.count_23x);
-            if(name.match(/.*5xx$/)) values.push(result.count_5xx);
-          }
+          if(name.match(/.*user$/)) values.push(result[result.length-1].cpu_user);
+          if(name.match(/.*sys$/)) values.push(result[result.length-1].cpu_system);
+          if(name.match(/.*23x$/)) values.push(result.count_23x);
+          if(name.match(/.*5xx$/)) values.push(result.count_5xx);
         }
+
         callback(null, values = values.slice((start - stop) / step));
 
     });
@@ -40,9 +37,7 @@ function get_info(hostname, name, url_type, context, port) {
 
 
 
-function chart(hostname, ports, chart_div,context){
-
-  
+function chart(hostname, ports, chart_div, context){
 
   var user      = get_info(hostname,hostname+" user","sys",context);
   var sys       = get_info(hostname,hostname+" sys", "sys",context);
@@ -53,9 +48,9 @@ function chart(hostname, ports, chart_div,context){
     http_array.push(get_info(hostname,hostname+"-"+ports[i]+" 5xx","http",context,ports[i]));
   }
 
-  d3.select(chart_div[0]).call(function(div) {
+  d3.select(chart_div).call(function(div) {
 
-    if(chart_div[0]=="#chart1"){
+    if(chart_div=="#chart0"){
     div.append("div")
         .attr("class", "axis")
         .call(context.axis().orient("top"));

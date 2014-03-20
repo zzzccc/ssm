@@ -40,7 +40,7 @@ class SrvinfosController < ApplicationController
       if !error and @srvinfo.save
         message="SUCCESS !!"
       else
-        message="ERROR !!"
+        message="ERROR: <hostname>:<port> required."
       end
       format.js{ render "ajax.js"  , locals:{ msg: message } } 
     end

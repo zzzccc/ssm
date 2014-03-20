@@ -44,26 +44,56 @@
               %ul.dropdown-menu.dropdown-menu-form{:role => "menu"}
                 %li
                   %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"} ALL
+                    %input{type: "checkbox" , id: "chk_all"}= " ALL"
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"}= " CPU ONLY"
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"}= " MEMORY ONLY"
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"}= " NETWORK ONLY"
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"}= " DISK ONLY"
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"}= " HTTP-23X ONLY"
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"}= " HTTP-4XX ONLY"
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"}= " HTTP-5XX ONLY"
 
                 - @srvinfos.each do |key,srvinfo|
-                  %li
+                  %li#sys
                     %label.checkbox
-                      %input{type: "checkbox"}= "#{key} - CPU"
-                  %li
+                      %input{type: "checkbox" , id: "chk_cpu_#{key}", name: "chk_cpu_#{key}"}= " #{key} - CPU"
+                  %li#sys
                     %label.checkbox
-                      %input{type: "checkbox"}= "#{key} - MEMORY"
-                  %li
+                      %input{type: "checkbox" , id: "chk_memory_#{key}", name: "chk_memory_#{key}"}= " #{key} - MEMORY"
+                  %li#sys
                     %label.checkbox
-                      %input{type: "checkbox"}= "#{key} - NETWORK"
-                  %li
+                      %input{type: "checkbox" , id: "chk_network_#{key}", name: "chk_network_#{key}"}= " #{key} - NETWORK"
+                  %li#sys
                     %label.checkbox
-                      %input{type: "checkbox"}= "#{key} - DISK"
+                      %input{type: "checkbox" , id: "chk_disk_#{key}", name: "chk_disk_#{key}"}= " #{key} - DISK"
 
                   - srvinfo.each_with_index do |si,index|
-                    %li
+                    %li#srv
                       %label.checkbox
-                        %input{type: "checkbox"}="#{si.host} - #{si.port} port"
+                        %input{type: "checkbox" , id: "chk_port_#{si.port}_#{key}_23x", name: "chk_port_#{key}_23x"}
+                          =" #{si.host} - #{si.port} 23X"
+                    %li#srv
+                      %label.checkbox
+                        %input{type: "checkbox" , id: "chk_port_#{si.port}_#{key}_4xx", name: "chk_port_#{key}_4xx"}
+                          =" #{si.host} - #{si.port} 4XX"
+                    %li#srv
+                      %label.checkbox
+                        %input{type: "checkbox" , id: "chk_port_#{si.port}_#{key}_5xx", name: "chk_port_#{key}_5xx"}
+                          =" #{si.host} - #{si.port} 5XX"
 
             %button.btn.btn-default{type: "submit"} Apply
 
@@ -79,6 +109,18 @@
 :javascript
   $('.dropdown-menu').on('click', function(e) {
     if($(this).hasClass('dropdown-menu-form')) {
-        e.stopPropagation();
+        //e.stopPropagation();
     }
+  });
+
+  $("input:checkbox[id=chk_all]").on("click", function(e){
+    var chk=$(this).prop("checked");
+    if(chk){
+      $("li[id=sys] input:checkbox , li[id=srv] input:checkbox").each(function(){ console.log("id="+$(this).attr("id")); $(this).attr("checked",true); });
+      e.stopPropagation();
+    }else{
+      $("li[id=sys] input:checkbox , li[id=srv] input:checkbox").each(function(){ $(this).attr("checked",false); });
+      e.stopPropagation();
+    }
+    console.log(chk);
   });

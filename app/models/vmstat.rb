@@ -10,9 +10,9 @@ class Vmstat
   field :net_out, type: Integer
   field :time, type: DateTime
 
-  def self.get_data(hostname,time,sec)
+  def self.get_data(hostname,time)
     result=Vmstat.new({ :mem_active => 0, :cpu_idle => 0 , :cpu_user => 0 , :cpu_system => 0 , :net_in => 0 , :net_out => 0})
-    vmstats = Vmstat.where( :time => { :$gte => time } ).in( server_name: ["#{hostname}"] )
+    vmstats = Vmstat.where( time: { :$gte => time } , server_name: "#{hostname}" )
     vmstats.each do |vmstat|
       #puts "--------#{vmstat}"
       result.mem_active  += vmstat.mem_active

@@ -13,6 +13,7 @@ gem 'haml-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
 gem 'sprockets', '2.11.0'
+gem 'thin'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'

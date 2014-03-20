@@ -38,11 +38,47 @@
         %div.col-lg-3
           %form.navbar-form.navbar-left{role: "search"}
             .form-group
-              %input.form-control{placeholder: "Search", type: "text"}/
-            %button.btn.btn-default{type: "submit"} SEARCH
+              %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+                Display
+                %span.caret
+              %ul.dropdown-menu.dropdown-menu-form{:role => "menu"}
+                %li
+                  %label.checkbox
+                    %input{type: "checkbox" , id: "chk_all"} ALL
+
+                - @srvinfos.each do |key,srvinfo|
+                  %li
+                    %label.checkbox
+                      %input{type: "checkbox"}= "#{key} - CPU"
+                  %li
+                    %label.checkbox
+                      %input{type: "checkbox"}= "#{key} - MEMORY"
+                  %li
+                    %label.checkbox
+                      %input{type: "checkbox"}= "#{key} - NETWORK"
+                  %li
+                    %label.checkbox
+                      %input{type: "checkbox"}= "#{key} - DISK"
+
+                  - srvinfo.each_with_index do |si,index|
+                    %li
+                      %label.checkbox
+                        %input{type: "checkbox"}="#{si.host} - #{si.port} port"
+
+            %button.btn.btn-default{type: "submit"} Apply
+
+
+            
 
       / /.navbar-collapse
 
     .container-fluid
       #ssm-main.span9
         = yield
+
+:javascript
+  $('.dropdown-menu').on('click', function(e) {
+    if($(this).hasClass('dropdown-menu-form')) {
+        e.stopPropagation();
+    }
+  });

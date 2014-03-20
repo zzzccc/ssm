@@ -60,7 +60,8 @@ function chart(hostname, ports, chart_div, context){
         .data([user.add(sys), user, sys])// add,subtract,multuiply,divide
       .enter().append("div")
         .attr("class", "horizon")
-        .call(context.horizon().extent([0, 100]));
+        .call(context.horizon().extent([0, 100]))
+        .on("click", function(d,i){ alert(d+","+i)});
 
     div.selectAll(".horizon1")
         .data(http_array)// add,subtract,multuiply,divide

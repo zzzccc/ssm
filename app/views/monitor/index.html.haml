@@ -4,24 +4,32 @@
 :javascript
   var width = $("#chart1").width();
     
-  var context1 = cubism.context()
+  var chart_context = cubism.context()
     .serverDelay(0)
     .clientDelay(0)
     .step(1e3)
     .size(width);
 
   // On mousemove, reposition the chart values to match the rule.
-  context1.on("focus", function(i) {
-    d3.selectAll(".value").style("right", i == null ? null : context1.size() - i + "px");
+  chart_context.on("focus", function(i) {
+    d3.selectAll(".value").style("right", i == null ? null : chart_context.size() - i + "px");
+    data=d3.selectAll(".value");
+    for (var i=0;i<data.length;i++){
+      //console.log("data:"+i+"="+data[i].innerHTML);
+    }
   });    
+
+  chart_context.on("change", function(start,stop){
+  })
+
 
   $(window).load(function(){
 
     #{
       # monitor_helper.rb
     }
-    #{draw(@srvinfos)}
+    #{draw(@srvinfos , 'chart_context')}
 
-    //chart("xubuntu",["#chart1","#chart2"],context1);
-    //chart("xubuntu",["#chart3","#chart4"],context1);
+    //chart("xubuntu",["#chart1","#chart2"],chart_context);
+    //chart("xubuntu",["#chart3","#chart4"],chart_context);
   });

@@ -1,3 +1,3 @@
 json.array!(@vmstats) do |vmstat|
-  json.extract! vmstat , :server_name , :mem_active, :net_in, :net_out, :time , :cpu_idle , :cpu_system , :cpu_user
+  json.extract! vmstat , :server_name , :load_average_one, :load_average_five, :load_average_fifteen
 end

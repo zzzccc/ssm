@@ -19,34 +19,50 @@ class VmstatInput < Fluent::Input
     super
     server_name   = Socket.gethostname.downcase
     frequency     = 1 # every 1 secs.
-    cpu_idle_b    = 0
-    cpu_user_b    = 0
-    cpu_system_b  = 0
-
+    
     while true
 
       vmstat=Vmstat.snapshot
 
-      #puts vmstat.cpus
-      cpu_user    = vmstat.cpus[0].user
-      cpu_system  = vmstat.cpus[0].system
-      cpu_idle    = vmstat.cpus[0].idle
-      mem_active  = vmstat.memory.active
-      net_in      = vmstat.network_interfaces[0].in_bytes
-      net_out     = vmstat.network_interfaces[0].out_bytes
+      mem_active    = vmstat.memory.active
+      mem_wired     = vmstat.memory.wired
+      mem_inactive  = vmstat.memory.inactive
+      mem_free      = vmstat.memory.free
+      mem_pageins   = vmstat.memory.pageins
+      mem_pageouts  = vmstat.memory.pageouts
 
-      cpu_idle_b,cpu_user_b,cpu_system_b=cpu_idle,cpu_user,cpu_system if cpu_idle_b==0
-
-      ci  = ((cpu_idle - cpu_idle_b)/frequency).to_i
-      cu  = ((cpu_user - cpu_user_b)/frequency).to_i
-      cs  = ((cpu_system - cpu_system_b)/frequency).to_i
-
-      cpu_idle_b    = cpu_idle
-      cpu_user_b    = cpu_user
-      cpu_system_b  = cpu_system
+      # NETWORK
+      net_names,net_ins,net_in_errs,net_outs,net_out_errs=[],[],[],[],[]
+      vmstat.network_interfaces.each do |net|
+        #puts "#{net.name},#{net.in_bytes},#{net.in_errors},#{net.out_bytes},#{net.out_errors}"
+        net_names     << net.name
+        net_ins       << net.in_bytes
+        net_in_errs   << net.in_errors
+        net_outs      << net.out_bytes
+        net_out_errs  << net.out_errors
+      end
 
       time    = Time.now.to_i
-      record  = { server_name: server_name ,  cpu_idle: ci , cpu_user: cu , cpu_system: cs , mem_active: mem_active , net_in: net_in , net_out: net_out , time: time}
+
+      record  = { 
+                  server_name: server_name ,  
+                  mem_active: mem_active , 
+                  mem_wired: mem_wired , 
+                  mem_inactive: mem_inactive , 
+                  mem_free: mem_free , 
+                  mem_pageins: mem_pageins , 
+                  mem_pageouts: mem_pageouts , 
+                  load_average_one: vmstat.load_average.one_minute,
+                  load_average_five: vmstat.load_average.five_minutes,
+                  load_average_fifteen: vmstat.load_average.fifteen_minutes,
+                  net_names: net_names , 
+                  net_ins: net_ins , 
+                  net_in_errs: net_in_errs , 
+                  net_outs: net_outs , 
+                  net_out_errs: net_out_errs,
+                  time: time
+                }
+
       Fluent::Engine.emit(@tag, time, record)
       sleep(frequency)
     end

@@ -23,8 +23,9 @@ function get_info(hostname, name, url_type, context, port) {
         while (last < stop) {
           last += step;
 
-          if(name.match(/.*user$/)) values.push(result[result.length-1].cpu_user);
-          if(name.match(/.*sys$/)) values.push(result[result.length-1].cpu_system);
+          if(name.match(/.*load_average_one$/)) values.push(result[result.length-1].load_average_one);
+          if(name.match(/.*load_average_five$/)) values.push(result[result.length-1].load_average_five);
+          if(name.match(/.*load_average_fifteen$/)) values.push(result[result.length-1].load_average_fifteen);
           if(name.match(/.*23x$/)) values.push(result.count_23x);
           if(name.match(/.*5xx$/)) values.push(result.count_5xx);
         }
@@ -39,8 +40,10 @@ function get_info(hostname, name, url_type, context, port) {
 
 function chart(hostname, ports, chart_div, context){
 
-  var user      = get_info(hostname,hostname+" user","sys",context);
-  var sys       = get_info(hostname,hostname+" sys", "sys",context);
+  var load_average_one      = get_info(hostname,hostname+" load_average_one","sys",context);
+  var load_average_five      = get_info(hostname,hostname+" load_average_five","sys",context);
+  var load_average_fifteen      = get_info(hostname,hostname+" load_average_fifteen","sys",context);
+  
 
   var http_array=[];
   for(var i=0;i<ports.length;i++){
@@ -57,10 +60,10 @@ function chart(hostname, ports, chart_div, context){
       }
 
     div.selectAll(".horizon")
-        .data([user.add(sys), user, sys])// add,subtract,multuiply,divide
+        .data([load_average_one,load_average_five,load_average_fifteen])// add,subtract,multuiply,divide
       .enter().append("div")
         .attr("class", "horizon")
-        .call(context.horizon().extent([0, 100]))
+        .call(context.horizon().extent([0, 3]))
         .on("click", function(d,i){ alert(d+","+i)});
 
     div.selectAll(".horizon1")

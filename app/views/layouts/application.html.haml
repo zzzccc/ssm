@@ -36,66 +36,11 @@
             %button.btn.btn-default{type: "submit"} ADD
 
         %div.col-lg-3
-          %form.navbar-form.navbar-left{role: "search"}
+          %form.navbar-form.navbar-left
             .form-group
-              %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
-                Display
-                %span.caret
-              %ul.dropdown-menu.dropdown-menu-form{:role => "menu"}
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " ALL"
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " CPU ONLY"
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " MEMORY ONLY"
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " NETWORK ONLY"
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " DISK ONLY"
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " HTTP-23X ONLY"
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " HTTP-4XX ONLY"
-                %li
-                  %label.checkbox
-                    %input{type: "checkbox" , id: "chk_all"}= " HTTP-5XX ONLY"
-
-                - @srvinfos.each do |key,srvinfo|
-                  %li#sys
-                    %label.checkbox
-                      %input{type: "checkbox" , id: "chk_cpu_#{key}", name: "chk_cpu_#{key}"}= " #{key} - CPU"
-                  %li#sys
-                    %label.checkbox
-                      %input{type: "checkbox" , id: "chk_memory_#{key}", name: "chk_memory_#{key}"}= " #{key} - MEMORY"
-                  %li#sys
-                    %label.checkbox
-                      %input{type: "checkbox" , id: "chk_network_#{key}", name: "chk_network_#{key}"}= " #{key} - NETWORK"
-                  %li#sys
-                    %label.checkbox
-                      %input{type: "checkbox" , id: "chk_disk_#{key}", name: "chk_disk_#{key}"}= " #{key} - DISK"
-
-                  - srvinfo.each_with_index do |si,index|
-                    %li#srv
-                      %label.checkbox
-                        %input{type: "checkbox" , id: "chk_port_#{si.port}_#{key}_23x", name: "chk_port_#{key}_23x"}
-                          =" #{si.host} - #{si.port} 23X"
-                    %li#srv
-                      %label.checkbox
-                        %input{type: "checkbox" , id: "chk_port_#{si.port}_#{key}_4xx", name: "chk_port_#{key}_4xx"}
-                          =" #{si.host} - #{si.port} 4XX"
-                    %li#srv
-                      %label.checkbox
-                        %input{type: "checkbox" , id: "chk_port_#{si.port}_#{key}_5xx", name: "chk_port_#{key}_5xx"}
-                          =" #{si.host} - #{si.port} 5XX"
-
-            %button.btn.btn-default{type: "submit"} Apply
+              .server-list
+            %button.btn.btn-default{type: "submit"} SAVE
+            %button.btn.btn-default{type: "submit"} APPLY
 
 
             
@@ -107,20 +52,22 @@
         = yield
 
 :javascript
-  $('.dropdown-menu').on('click', function(e) {
-    if($(this).hasClass('dropdown-menu-form')) {
-        //e.stopPropagation();
-    }
+  var myData = [{id: 1, label: "Test" },{id: 2, label: "Test2" },{id: 3, label: "Test3" }];
+
+  $(".server-list").dropdownCheckbox({
+    queryUrl: "/bootstrap-dropdown-checkbox/json/exemple_1.json",
+    data: myData,
+    btnClass: "btn btn-primary",
+    title: "SERVER LIST"
+
+    //templateButton: '<button><a class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Accounts<b class="caret"></b></a></button>' 
   });
 
-  $("input:checkbox[id=chk_all]").on("click", function(e){
-    var chk=$(this).prop("checked");
-    if(chk){
-      $("li[id=sys] input:checkbox , li[id=srv] input:checkbox").each(function(){ console.log("id="+$(this).attr("id")); $(this).attr("checked",true); });
-      e.stopPropagation();
-    }else{
-      $("li[id=sys] input:checkbox , li[id=srv] input:checkbox").each(function(){ $(this).attr("checked",false); });
-      e.stopPropagation();
-    }
-    console.log(chk);
+  $(".server-list").on("click",function(){
+    var checked=$("myselector").dropdownCheckbox("checked");
+    var unchecked=$("myselector").dropdownCheckbox("unchecked");
+    console.log("chk="+checked);
+    console.log("unchk="+unchecked);
   });
+
+  

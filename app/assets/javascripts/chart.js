@@ -28,6 +28,7 @@ function get_info(hostname, name, url_type, context, port) {
           if(name.match(/.*load_average_fifteen$/)) values.push(result[result.length-1].load_average_fifteen);
           if(name.match(/.*23x$/)) values.push(result.count_23x);
           if(name.match(/.*5xx$/)) values.push(result.count_5xx);
+          if(name.match(/.*4xx$/)) values.push(result.count_4xx);
         }
 
         callback(null, values = values.slice((start - stop) / step));
@@ -49,6 +50,7 @@ function chart(hostname, ports, chart_div, context){
   for(var i=0;i<ports.length;i++){
     http_array.push(get_info(hostname,hostname+"-"+ports[i]+" 23x","http",context,ports[i]));
     http_array.push(get_info(hostname,hostname+"-"+ports[i]+" 5xx","http",context,ports[i]));
+    http_array.push(get_info(hostname,hostname+"-"+ports[i]+" 4xx","http",context,ports[i]));
   }
 
   d3.select(chart_div).call(function(div) {

@@ -5,8 +5,8 @@ function get_info(hostname, name, url_type, context, port) {
   var i = 0;
   var last;
 
-  var sys_url="http://localhost:3000/sys/"+encodeURIComponent(hostname);
-  var http_url="http://localhost:3000/http/"+encodeURIComponent(hostname)+"/"+port;
+  var sys_url="http://"+location.host+"/sys/"+encodeURIComponent(hostname);
+  var http_url="http://"+location.host+"/http/"+encodeURIComponent(hostname)+"/"+port;
   var url="";
 
   if(url_type=="sys") url = sys_url;
